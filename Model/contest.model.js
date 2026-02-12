@@ -8,7 +8,7 @@ const contestSchema = new mongoose.Schema(
 
     contestStatus: {
       type: String,
-      enum: ["Drafted", "In-Review", "Active", "On Hold", "Completed"],
+      enum: ["Drafted","In-Review","Active","On Hold","Completed"],
       default: "Drafted"
     },
 

@@ -7,10 +7,10 @@ const contestRoutes = require("./Routes/contest.routes");
 const app = express();
 app.use(express.json());
 
-app.use("/api/contests", contestRoutes);
+app.use("/api/contests",contestRoutes);
 
 app.get("/", (req, res) => {
-  res.send("API is running 🚀");
+  res.send("API is running");
 });
 
 mongoose
