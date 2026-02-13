@@ -106,7 +106,7 @@ exports.getContestByContestId = async (req, res) => {
       };
     }
 
-    // ✅ Position filter (Exact match because it is Number)
+    //Position filter (Exact match because it is Number)
     if (position) {
       filter["details.jobDetails.noOfPositions"] = Number(position);
     }
@@ -128,6 +128,44 @@ exports.getContestByContestId = async (req, res) => {
 
   } catch (error) {
     res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+// Get Contests By Position
+exports.getContestsByPosition = async (req, res) => {
+  try {
+    const { position } = req.query;
+
+    // Check if position is provided
+    if (!position) {
+      return res.status(400).json({
+        success: false,
+        message: "position query param is required"
+      });
+    }
+
+    // Check if position is a number
+    if (isNaN(position)) {
+      return res.status(400).json({
+        success: false,
+        message: "position must be a valid number"
+      });
+    }
+
+    const contests = await Contest.find({
+      "details.jobDetails.noOfPositions": Number(position)
+    }).sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: contests.length,
+      data: contests
+    });
+
+  } catch (error) {
+    return res.status(500).json({
       success: false,
       message: error.message
     });

@@ -4,7 +4,8 @@ const router = express.Router();
 const {
   getAllUserContests,
   getContestsByAdminId,
-  getContestByContestId
+  getContestByContestId,
+  getContestsByPosition
 } = require("../Controllers/contest.controller");
 
 // Get all contests
@@ -15,5 +16,6 @@ router.get("/admin", getContestsByAdminId);
 
 // Get contest by contestId
 router.get("/contest", getContestByContestId);
+router.get("/by-position", getContestsByPosition);
 
 module.exports = router;

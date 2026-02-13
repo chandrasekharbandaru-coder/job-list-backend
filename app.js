@@ -5,14 +5,19 @@ require("dotenv").config();
 const contestRoutes = require("./Routes/contest.routes");
 
 const app = express();
+
+// Middleware
 app.use(express.json());
 
-app.use("/api/contests",contestRoutes);
+// Routes
+app.use("/api/contests", contestRoutes);
 
+// Test Route
 app.get("/", (req, res) => {
   res.send("API is running");
 });
 
+// MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
