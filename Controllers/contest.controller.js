@@ -67,9 +67,9 @@ exports.getContestsByAdminId = async (req, res) => {
 // contestId + title + experience + budget
 exports.getContestByContestId = async (req, res) => {
   try {
-    const { contestId, title, experience, budget } = req.query;
+    const { contestId, title, experience, budget, position } = req.query;
 
-    //Validate contestId
+    // Validate contestId
     if (!contestId) {
       return res.status(400).json({
         success: false,
@@ -77,12 +77,12 @@ exports.getContestByContestId = async (req, res) => {
       });
     }
 
-    //Base filter 
+    // Base filter
     const filter = {
       contestId: contestId.toString().trim()
     };
 
-    //Title filter (case insensitive)
+    // Title filter (case insensitive)
     if (title) {
       filter["details.jobDetails.jobTitle"] = {
         $regex: title.trim(),
@@ -90,7 +90,7 @@ exports.getContestByContestId = async (req, res) => {
       };
     }
 
-    //Experience filter (handle extra spaces in DB)
+    // Experience filter
     if (experience) {
       filter["details.jobDetails.experience"] = {
         $regex: experience.trim(),
@@ -98,7 +98,7 @@ exports.getContestByContestId = async (req, res) => {
       };
     }
 
-    //Budget filter (handle extra spaces)
+    // Budget filter
     if (budget) {
       filter["details.jobDetails.budget"] = {
         $regex: budget.trim(),
@@ -106,7 +106,12 @@ exports.getContestByContestId = async (req, res) => {
       };
     }
 
-    //Find contest
+    // ✅ Position filter (Exact match because it is Number)
+    if (position) {
+      filter["details.jobDetails.noOfPositions"] = Number(position);
+    }
+
+    // Find contest
     const contest = await Contest.findOne(filter);
 
     if (!contest) {
@@ -116,7 +121,6 @@ exports.getContestByContestId = async (req, res) => {
       });
     }
 
-    //Success response
     res.status(200).json({
       success: true,
       data: contest
